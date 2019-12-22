@@ -3,8 +3,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,7 +31,7 @@ public class YandexMarketTest {
         }
 
         @Test
-        public void testFirstScript(){
+        public void testFirstScript() throws InterruptedException {
             //Переходим на страницу "Маркет"
             chromeDriver.findElement(By.xpath("//a[contains(@data-id, 'market') and contains(text(), 'Маркет')]")).click();
             //Переходим на страницу "Электроника"
@@ -41,20 +41,32 @@ public class YandexMarketTest {
             //Выбираем цену от 20000 р
             fillField(By.name("Цена от"), "20000");
             //Выбираем производителей Samsung, LG
-            chromeDriver.findElement(By.xpath("//input[contains(@type, 'checkbox') and contains(@name, 'Производитель Samsung')]")).click();
-            chromeDriver.findElement(By.xpath("//input[contains(@type, 'checkbox') and contains(@name, 'Производитель LG')]")).click();
+            chromeDriver.findElement(By.xpath("//input[contains(@type, 'checkbox') and contains(@name, 'Производитель Samsung')]")).sendKeys(Keys.SPACE);
+            chromeDriver.findElement(By.xpath("//input[contains(@type, 'checkbox') and contains(@name, 'Производитель LG')]")).sendKeys(Keys.SPACE);
+            //Проверяем что количество элементов равно 12
+            checkCountOfResultElements(12);
             //Находим и запоминаем наименование первого элемента по фильтру
-            WebElement firstItem = chromeDriver.
-                    findElement(By.xpath("//div[contains(@class, 'n-snippet-list n-snippet-list_type_vertical metrika b-zone b-spy-init b-spy-events i-bem metrika_js_inited snippet-list_js_inited b-spy-init_js_inited b-zone_js_inited')]//div[1]//div[3]//div//a"));
-            String itemName = firstItem.getAttribute("title");
-            System.out.println(itemName);
+            String itemName = getFirstElementTitle();
             //Заполняем поле поиска наименованием первого элемента из предыдущего шага
-            fillField(By.name(""), itemName);
+            fillField(By.id("header-search"), itemName);
             //Кликаем на поиск
-            chromeDriver.findElement(By.xpath("")).click();
+            chromeDriver.findElement(By.className("search2__button")).click();
             //Проверяем, что наименования совпадают
-            Assert.assertEquals(itemName, chromeDriver.findElement(By.xpath("")));
+            Assert.assertEquals(itemName, getFirstElementTitle());
         }
+
+    private String getFirstElementTitle() {
+        return chromeDriver
+                .findElements(By.xpath("//*[starts-with(@id, 'product')]"))
+                .get(0)
+                .findElement(By.xpath("//div[4]/div[1]/h3/a")).getAttribute("title");
+    }
+
+    private void checkCountOfResultElements(int expectedCount) {
+        int actualCount = chromeDriver
+                .findElements(By.xpath("//*[starts-with(@id, 'product')]")).size();
+        Assert.assertEquals(expectedCount, actualCount);
+    }
 
     //Заполнение полей
     public void fillField(By locator, String value) {

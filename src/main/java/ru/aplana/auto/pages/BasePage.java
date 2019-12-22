@@ -1,6 +1,7 @@
 package ru.aplana.auto.pages;
 
 import org.junit.Assert;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -21,6 +22,12 @@ public class BasePage {
         element.clear();
         element.sendKeys(value);
     }
+
+    public void fillCheckBox(WebElement element, Keys key) {
+        element.sendKeys(key);
+    }
+
+
 
     public void checkPageTitle(String pageTitle) {
         Assert.assertEquals(driver.getTitle(), pageTitle);
