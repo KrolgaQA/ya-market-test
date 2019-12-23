@@ -10,12 +10,8 @@ import java.util.List;
 
 public class SearchPage extends BasePage {
 
-    @FindBy(name = "\"Цена от\"")
+    @FindBy(name = "Цена от")
     WebElement priceStart;
-
-    public WebElement getPriceStart() {
-        return priceStart;
-    }
 
     @FindBy(xpath = "//input[contains(@type, 'checkbox') and contains(@name, 'Производитель Samsung')]")
     WebElement samsungProducer;
@@ -26,14 +22,15 @@ public class SearchPage extends BasePage {
     @FindBy(xpath = "//*[starts-with(@id, 'product')]")
     List<WebElement> searchResults;
 
-    @FindBy(xpath = "//div[4]/div[1]/h3/a")
-    WebElement productLink;
-
     @FindBy(id = "header-search")
     WebElement searchItem;
 
     @FindBy(className = "search2__button")
     WebElement searchButton;
+
+    public WebElement getPriceStart() {
+        return priceStart;
+    }
 
     public WebElement getSamsungProducer() {
         return samsungProducer;
@@ -47,10 +44,6 @@ public class SearchPage extends BasePage {
         return searchResults;
     }
 
-    public WebElement getProductLink() {
-        return productLink;
-    }
-
     public WebElement getSearchItem() {
         return searchItem;
     }
@@ -58,6 +51,7 @@ public class SearchPage extends BasePage {
     public WebElement getSearchButton() {
         return searchButton;
     }
+
 
     public void checkCountOfResultElements(int expectedCount) {
         int actualCount = searchResults.size();

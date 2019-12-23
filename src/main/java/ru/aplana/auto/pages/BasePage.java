@@ -27,8 +27,6 @@ public class BasePage {
         element.sendKeys(key);
     }
 
-
-
     public void checkPageTitle(String pageTitle) {
         Assert.assertEquals(driver.getTitle(), pageTitle);
     }

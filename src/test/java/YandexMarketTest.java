@@ -1,7 +1,4 @@
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -31,9 +28,11 @@ public class YandexMarketTest {
         }
 
         @Test
+        @Ignore
         public void testFirstScript() throws InterruptedException {
             //Переходим на страницу "Маркет"
             chromeDriver.findElement(By.xpath("//a[contains(@data-id, 'market') and contains(text(), 'Маркет')]")).click();
+            chromeDriver.findElement(By.xpath("/html/body/div[5]/div[3]/div/div/div[2]/div[1]/span")).click();
             //Переходим на страницу "Электроника"
             chromeDriver.findElement(By.xpath("//span[contains(@class, 'n-w-tab__control-caption') and contains(text(), 'Электроника')]")).click();
             //Переходим в категорию "Телевизоры"

@@ -8,7 +8,7 @@ public class YandexMainPage extends BasePage {
     @FindBy(xpath = "//a[contains(@data-id, 'market') and contains(text(), 'Маркет')]")
     WebElement selectMarketMenu;
 
-    public void selectMainMenu() {
+    public void selectYandexMarketFromMainMenu() {
         selectMarketMenu.click();
     }
 

@@ -1,79 +1,68 @@
 package ru.aplana.auto.steps;
 
-import org.junit.Assert;
-import org.openqa.selenium.Keys;
-import ru.aplana.auto.pages.MarketChooseCategoryPage;
-import ru.aplana.auto.pages.MarketChooseSubcategoryPage;
-import ru.aplana.auto.pages.SearchPage;
-import ru.aplana.auto.pages.YandexMainPage;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import ru.aplana.auto.util.ProducerType;
-import ru.yandex.qatools.allure.annotations.Step;
 
 public class ScenarioSteps {
-    YandexMainPage yandexMainPage = new YandexMainPage();
-    MarketChooseCategoryPage marketChooseCategoryPage = new MarketChooseCategoryPage();
-    MarketChooseSubcategoryPage marketChooseSubcategoryPage = new MarketChooseSubcategoryPage();
-    SearchPage searchPage = new SearchPage();
-    String itemTitle;
+    YandexMainSteps yandexMainSteps = new YandexMainSteps();
+    MarketChooseCategorySteps categorySteps = new MarketChooseCategorySteps();
+    MarketChooseSubcategorySteps subcategorySteps = new MarketChooseSubcategorySteps();
+    SearchSteps searchSteps = new SearchSteps();
 
-    @Step("Переход на страницу Яндекс Маркета")
-    public void getMarketPage() {
-        yandexMainPage.selectMainMenu();
+    @When("^Переходим на страницу \"Яндекс Маркет\"$")
+    public void goToMarketPage() {
+        yandexMainSteps.selectMarket();
     }
 
-    @Step("Выбор категории Электроника")
-    public void getCategory() {
-        marketChooseCategoryPage.selectCategory();
+    @When("^Подтверждаем регион$")
+    public void accept() {
+        categorySteps.acceptRegion();
     }
 
-    @Step("Выбор подкатегории Телевизоры")
-    public void getSubcategory() {
-        marketChooseSubcategoryPage.selectSubcategory();
+    @When("^Выбираем категорию \"Электроника\"$")
+    public void getElectronicCategory() {
+        categorySteps.selectElectronic();
     }
 
+    @When("^Выбираем подкатегорию \"Телевизоры\"$")
+    public void getTVSubcategory() {
+        subcategorySteps.selectTV();
+    }
 
-    @Step("Заполнение поля фильтра Цена от значением [0]")
+    @When("^Заполняем поле фильтра Цена значением \"(.+)\"$")
     public void fillPriceStart(String price) {
-        searchPage.fillField(searchPage.getPriceStart(), price);
+        searchSteps.fillPriceStart(price);
     }
 
-    @Step("Заполняем чекбокс фильтра Производитель [0]")
-    public void fillChekbox(ProducerType type) {
-        switch (type) {
-            case Samsung:
-                searchPage.fillCheckBox(searchPage.getSamsungProducer(), Keys.SPACE);
-                break;
-            case LG:
-                searchPage.fillCheckBox(searchPage.getLgProducer(), Keys.SPACE);
-                break;
-            default:
-                throw new AssertionError("Unknown producer");
-        }
+    @When("^Заполняем чекбокс фильтра Производитель: \"(.+)\"$")
+    public void fillProducerCheckbox(ProducerType type) {
+        searchSteps.fillProducerFilter(type);
     }
 
-    @Step("Проверяем количество выведенных результатов")
-    public void checkResultsCount(int expectedCount){
-        searchPage.checkCountOfResultElements(expectedCount);
+    @Then("^Проверяем, что количество выведенных результатов равно: \"(.+)\"$")
+    public void checkResults(int expectedCount){
+        searchSteps.checkResultsCount(expectedCount);
     }
 
-    @Step("Запоминаем название первого элемента списка по фильтру")
-    public void saveProductTitle(){
-        itemTitle = searchPage.getFirstElementTitle();
+    @Then("^Запоминаем название первого товара из списка результатов по фильтру$")
+    public void saveTitle(){
+        searchSteps.saveProductTitle();
     }
 
-    @Step("Заполняем поле поиска наименованием")
-    public void fillSearchWithSavedTitle(){
-        searchPage.fillField(searchPage.getSearchItem(), itemTitle);
+    @When("^Заполняем поле поиска наименованием сохраненного товара$")
+    public void searchSavedTitle(){
+        searchSteps.fillSearchWithSavedTitle();
     }
 
-    @Step("Кликаем на кнопку поиска")
+    @When("^Кликаем на кнопку поиска$")
     public void clickSearchBtn(){
-        searchPage.getSearchButton().click();
+        searchSteps.clickSearchBtn();
     }
 
-    @Step("Проверяем, что наименования совпадают")
+    @Then("^Проверяем, что наименования товаров совпадают$")
     public void checkTitlesEquals(){
-        Assert.assertEquals(itemTitle, searchPage.getFirstElementTitle());
+        searchSteps.checkTitlesEquals();
     }
 
 }

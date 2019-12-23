@@ -18,10 +18,6 @@ public class WebDriverConfiguration {
     private static String baseURL;
     private static Properties properties = TestProperties.getINSTANCE().getProperties();
 
-    private WebDriverConfiguration() {
-        throw new AssertionError("Utility class");
-    }
-
     @Before
     public static void setUp() {
         switch (properties.getProperty("browser")) {
